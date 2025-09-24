@@ -75,25 +75,14 @@ The generator requires specific Factorio configuration for data extraction:
 
 ### Local Testing Environment
 
-1. **Create Development Setup**:
-
-   ```bash
-   # Link repository to Factorio mods directory
-   # Windows (PowerShell):
-   New-Item -ItemType SymbolicLink -Path "$env:APPDATA\Factorio\mods\factorio-mocks-generator" -Target "$(pwd)/mod"
-
-   # Linux/macOS:
-   ln -s "$(pwd)/mod" ~/.factorio/mods/factorio-mocks-generator
-   ```
-
-2. **Install Dependencies**:
+1. **Install Dependencies**:
 
    ```bash
    # Install Lua dependencies using rockspec
    luarocks install --only-deps factorio-mocks-generator-dev-1.rockspec
    ```
 
-3. **Test Extraction Setup**:
+2. **Test Extraction Setup**:
 
    ```bash
    # Build LIVR rules and run the extraction and validation process
