@@ -1,0 +1,20 @@
+version: 2
+updates:
+  # GitHub Actions dependencies
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore"
+      include: "scope"
+    labels:
+      - "type: maintenance"
+      - "component: ci-cd"
+    open-pull-requests-limit: 5
+
+  # Note: LuaRocks dependencies are not supported by Dependabot
+  # Manual dependency management will be required for Lua packages

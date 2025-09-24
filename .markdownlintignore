@@ -1,0 +1,15 @@
+# Ignore chat mode, instruction and prompt files from external source
+.github/chatmodes/**
+.github/instructions/github-actions-ci-cd-best-practices.instructions.md
+.github/instructions/self-explanatory-code-commenting.instructions.md
+.github/prompts/conventional-commit-generator.prompt.md
+
+# Ignore files with intentional linting rule violations
+.github/instructions/markdown-writing-standards.instructions.md
+.github/PULL_REQUEST_TEMPLATE/pull_request_template.md
+
+# Ignore non-markdown files that use # comments
+.github/CODEOWNERS
+
+# Ignore draft files (working documents with intentional formatting flexibility)
+.github/drafts/**

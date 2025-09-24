@@ -1,0 +1,80 @@
+{
+  "code-block-style": {
+    "style": "fenced"
+  },
+  "code-fence-style": {
+    "style": "backtick"
+  },
+  "emphasis-style": {
+    "style": "asterisk"
+  },
+  "fenced-code-language": {
+    "allowed_languages": [
+      "bash",
+      "dockerfile",
+      "gitignore",
+      "json",
+      "lua",
+      "markdown",
+      "powershell",
+      "text",
+      "yaml"
+    ],
+    "language_only": true
+  },
+  "first-line-h1": {
+    "allow_preamble": true
+  },
+  "heading-style": {
+    "style": "atx"
+  },
+  "hr-style": {
+    "style": "---"
+  },
+  "line-length": {
+    "code_blocks": false,
+    "line_length": 120,
+    "tables": false
+  },
+  "link-image-style": {
+    "collapsed": false,
+    "shortcut": false,
+    "url_inline": false
+  },
+  "no-duplicate-heading": {
+    "siblings_only": true
+  },
+  "ol-prefix": {
+    "style": "ordered"
+  },
+  "proper-names": {
+    "code_blocks": false,
+    "names": [
+      "Crowdin",
+      "Factorio",
+      "factorio-mocks",
+      "factorio-mocks-generator",
+      "factorio-mocks-modpacks",
+      "factorio-mocks-data",
+      "factorio-mocks-loader",
+      "GitHub",
+      ".github",
+      "github.com",
+      "github.io",
+      "Ko-fi",
+      "Lua",
+      "lua-http",
+      "lua-LIVR",
+      "lua-LIVR-extra",
+      "LuaRocks",
+      "ORAS",
+      "Wube"
+    ]
+  },
+  "strong-style": {
+    "style": "asterisk"
+  },
+  "ul-style": {
+    "style": "dash"
+  }
+}

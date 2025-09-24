@@ -1,0 +1,11 @@
+{
+  "markdownlint.config": {
+    "extends": ".markdownlint.json"
+  },
+  "files.exclude": {
+    "**/.git": true
+  },
+  "search.exclude": {
+    "**/.git": true
+  }
+}
