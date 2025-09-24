@@ -62,7 +62,7 @@ avoid conflicts and minimize harm.
 When an incident does occur, it is important to report it promptly.
 
 To report a possible violation, directly contact
-<img src=".github/images/Discord-Symbol-Blurple.svg" alt="Discord" title="Discord" style="height: 1em; vertical-align: middle;"> [@QuingKhaos](https://discordapp.com/users/693126941737353266). <!-- markdownlint-disable-line MD013 MD033 -->
+[<img src=".github/images/Discord-Symbol-Blurple.svg" alt="Discord" title="Discord" style="height: 1em; vertical-align: middle;"> @QuingKhaos](https://discordapp.com/users/693126941737353266). <!-- markdownlint-disable-line MD013 MD033 -->
 
 Community Moderators take reports of violations seriously and will make every effort to respond in a timely manner.
 They will investigate all reports of code of conduct violations, reviewing messages, logs, and recordings, or
