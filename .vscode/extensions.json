@@ -2,6 +2,7 @@
   "recommendations": [
     "DavidAnson.vscode-markdownlint",
     "editorconfig.editorconfig",
-    "justarandomgeek.factoriomod-debug"
+    "justarandomgeek.factoriomod-debug",
+    "sumneko.lua"
   ]
 }

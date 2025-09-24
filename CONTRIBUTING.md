@@ -130,7 +130,7 @@ The generator requires specific Factorio configuration for data extraction:
 
    ```bash
    # Run documentation linting
-   markdownlint --config .markdownlint.json **/*.md
+   markdownlint --config .markdownlint.json --dot **/*.md
    ```
 
 4. **Commit and Push**
@@ -297,7 +297,7 @@ for centralized tracking. Use the component selector to specify "Generator" as t
 
 ### Code of Conduct
 
-We follow the [Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/). Key principles:
+We follow the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md). Key principles:
 
 - **Be Respectful**: Treat all contributors with respect
 - **Be Inclusive**: Welcome people of all backgrounds and experience levels
