@@ -1,0 +1,36 @@
+# Global ownership - QuingKhaos owns everything by default
+* @QuingKhaos
+
+# Factorio mod components (critical for data extraction accuracy)
+/mod/ @QuingKhaos
+
+# External processing and orchestration scripts
+/src/ @QuingKhaos
+/bin/ @QuingKhaos
+
+# Dependency management and build configuration
+*.rockspec @QuingKhaos
+/.editorconfig @QuingKhaos
+/.gitignore @QuingKhaos
+
+# GitHub infrastructure and workflows
+/.github/ @QuingKhaos
+/.github/workflows/ @QuingKhaos
+/.github/PULL_REQUEST_TEMPLATE/ @QuingKhaos
+/.github/ISSUE_TEMPLATE/ @QuingKhaos
+
+# Repository-specific copilot configuration
+/.github/copilot-instructions.md @QuingKhaos
+/.github/prompts/ @QuingKhaos
+/.github/instructions/ @QuingKhaos
+
+# Documentation and standards
+/README.md @QuingKhaos
+/CONTRIBUTING.md @QuingKhaos
+/SECURITY.md @QuingKhaos
+/.markdownlint.json @QuingKhaos
+
+# Legal and community files
+/LICENSE @QuingKhaos
+/CODE_OF_CONDUCT.md @QuingKhaos
+/FUNDING.yml @QuingKhaos

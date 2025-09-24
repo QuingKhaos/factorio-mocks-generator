@@ -1,0 +1,159 @@
+name: Quality Assurance
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-format:
+    runs-on: ubuntu-latest
+    name: Documentation Quality and Linting
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Install linting tools
+        run: |
+          npm install -g markdownlint-cli jsonlint
+          pip3 install jsonschema
+
+      - name: Check documentation structure
+        run: |
+          echo "📚 Checking documentation structure..."
+
+          # Essential project files
+          test -f "README.md" && echo "✅ README found"
+          test -f ".markdownlint.json" && echo "✅ Markdown lint configuration found"
+
+          echo "✅ Documentation structure check completed"
+
+      - name: Validate JSON files
+        run: |
+          echo "🔧 Validating JSON files..."
+
+          # Function to validate JSON files
+          validate_json() {
+            if [ -f "$1" ]; then
+              if python3 -m json.tool "$1" > /dev/null 2>&1; then
+                echo "✅ $1 is valid"
+              else
+                echo "❌ $1 is invalid"
+                python3 -m json.tool "$1"
+                return 1
+              fi
+            else
+              echo "⚠️ $1 not found (optional)"
+            fi
+          }
+
+          # Find and validate all JSON files
+          echo "🔍 Checking for additional JSON files..."
+          find . -name "*.json" -not -path "./.git/*" | while read -r file; do
+            validate_json "$file"
+          done
+
+          echo "✅ JSON validation completed"
+
+      - name: Lint JSON files with jsonlint
+        run: |
+          echo "🔍 Linting JSON files with jsonlint..."
+
+          # Function to lint JSON files with jsonlint
+          lint_json() {
+            if [ -f "$1" ]; then
+              echo "Linting $1..."
+              if jsonlint "$1" > /dev/null 2>&1; then
+                echo "✅ $1 passed jsonlint"
+              else
+                echo "❌ $1 failed jsonlint:"
+                jsonlint "$1"
+                return 1
+              fi
+            fi
+          }
+
+          # Find and lint all JSON files
+          echo "🔍 Finding and linting all JSON files..."
+          find . -name "*.json" -not -path "./.git/*" | while read -r file; do
+            lint_json "$file"
+          done
+
+          echo "✅ JSON linting completed"
+
+      - name: Lint Markdown files
+        run: |
+          echo "📝 Linting Markdown files..."
+
+          # Use markdownlint with the project configuration
+          if [ -f ".markdownlint.json" ]; then
+            echo "Using .markdownlint.json configuration"
+            markdownlint --config .markdownlint.json --dot "**/*.md" || {
+              echo "❌ Markdown linting failed"
+              echo "💡 Run 'markdownlint --config .markdownlint.json --dot --fix **/*.md' to auto-fix issues"
+              exit 1
+            }
+          else
+            echo "No .markdownlint.json found, using default rules"
+            markdownlint --dot "**/*.md" || {
+              echo "❌ Markdown linting failed"
+              exit 1
+            }
+          fi
+
+          echo "✅ Markdown linting completed"
+
+      - name: Check Configuration Synchronization
+        run: |
+          echo "🔄 Checking configuration synchronization..."
+
+          # Check if markdownlint config and instruction file are in sync
+          if [ -f ".markdownlint.json" ] && [ -f ".github/instructions/markdown-writing-standards.instructions.md" ]; then
+            echo "📋 Checking markdownlint configuration sync..."
+
+            # Extract line length from config
+            LINE_LENGTH=$(jq -r '.["line-length"].line_length // 120' .markdownlint.json)
+
+            # Check if instruction file mentions the correct line length
+            if grep -q "Maximum line length.*: ${LINE_LENGTH} characters" .github/instructions/markdown-writing-standards.instructions.md; then
+              echo "✅ Line length configuration is synchronized (${LINE_LENGTH} characters)"
+            else
+              echo "⚠️  Line length in instruction file may not match .markdownlint.json (${LINE_LENGTH})"
+              echo "📝 Please review .github/instructions/markdown-writing-standards.instructions.md"
+            fi
+
+            # Extract allowed languages from config
+            if jq -e '.["fenced-code-language"]["allowed_languages"]' .markdownlint.json >/dev/null 2>&1; then
+              LANG_COUNT=$(jq '.["fenced-code-language"]["allowed_languages"] | length' .markdownlint.json)
+              echo "📝 Found ${LANG_COUNT} allowed code languages in configuration"
+
+              # Check if instruction file has a languages section
+              if grep -q "bash, dockerfile, gitignore, json, lua, markdown, powershell, text, yaml" .github/instructions/markdown-writing-standards.instructions.md; then
+                echo "✅ Code languages section found in instruction file"
+              else
+                echo "⚠️  Code languages in instruction file may need updating"
+                echo "📝 Please review the 'Allowed Code Block Languages' section"
+              fi
+            fi
+
+            # Extract proper nouns from config
+            if jq -e '.["proper-names"]["names"]' .markdownlint.json >/dev/null 2>&1; then
+              NOUN_COUNT=$(jq '.["proper-names"]["names"] | length' .markdownlint.json)
+              echo "📝 Found ${NOUN_COUNT} proper nouns in configuration"
+
+              # Check for proper nouns section in instruction file
+              if grep -q "## Proper Nouns" .github/instructions/markdown-writing-standards.instructions.md; then
+                echo "✅ Proper nouns section found in instruction file"
+              else
+                echo "⚠️  Proper nouns section may need updating in instruction file"
+              fi
+            fi
+
+          else
+            echo "⚠️  Configuration files not found, skipping sync check"
+          fi
+
+          echo "✅ Configuration synchronization check completed"
