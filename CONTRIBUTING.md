@@ -85,9 +85,7 @@ The generator requires specific Factorio configuration for data extraction:
 2. **Test Extraction Setup**:
 
    ```bash
-   # Build LIVR rules and run the extraction and validation process
-   lua bin/generator.lua build-rules <factorio-version>
-   lua bin/generator.lua extract-and-validate <path-to-factorio>
+   # TODO: Add specific commands to run local extraction tests
    ```
 
 ### Development Tools Setup

@@ -63,50 +63,7 @@ extracted-data/
 
 ## 🎮 How It Works
 
-### Two-Command Architecture
-
-The generator uses a dual-execution environment with external orchestration:
-
-```bash
-# Generate LIVR validation rules from Factorio JSON API
-lua bin/generator.lua build-rules <factorio-version>
-
-# Extract and validate Factorio data
-lua bin/generator.lua extract-and-validate <path-to-factorio>
-```
-
-### 1. Validation Rules Generation (`build-rules`)
-
-External script that prepares validation schemas:
-
-- **Factorio JSON API**: Fetches official API documentation
-- **LIVR Rule Generation**: Creates validation rules for data quality
-- **Schema Preparation**: Sets up validation for extraction pipeline
-- **No Factorio Required**: Runs independently using web APIs
-
-### 2. Data Extraction Pipeline (`extract-and-validate`)
-
-Orchestrates Factorio execution and processes results:
-
-1. **Factorio Mod Installation**: Links `/mod` directory to Factorio mods folder
-2. **Instrument Mode Execution**: Runs Factorio with `--instrument-mod` flag
-3. **Dual-Stage Capture**:
-   - **Data Stage**: Stdout capture for `data.raw`, `mods`, `settings`, `feature_flags`
-   - **Runtime Stage**: File monitoring for `prototypes` and runtime `settings`
-4. **External Processing**: ZIP extraction for localization, data validation, serialization
-5. **Output Generation**: Serpent-serialized Lua code and `.cfg` locale files
-
-### Technical Implementation
-
-**Factorio Environment** (`/mod`):
-
-- Runs in Factorio's Lua 5.2 sandbox with API access
-- Limited to `print()` and `helpers.write_file()` for output
-
-**External Processing** (`/src`, `/bin`):
-
-- Full system Lua with file system and network access
-- Handles orchestration, validation, and artifact generation
+TODO
 
 ## 🔧 Development Setup
 

@@ -3,6 +3,8 @@ description: 'Debug your application to find and fix a bug'
 tools: ['editFiles', 'search', 'runCommands', 'usages', 'problems', 'testFailure', 'fetch', 'githubRepo', 'runTests']
 ---
 
+<!-- Repository: factorio-mocks-generator -->
+
 # Debug Mode Instructions
 
 You are in debug mode. Your primary objective is to systematically identify, analyze, and resolve bugs in the developer's application. Follow this structured debugging process:
