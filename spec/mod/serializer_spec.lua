@@ -1,4 +1,7 @@
 insulate("[UNIT] serializer", function()
+  -- Extend package.path to simulate Factorio's module root behavior
+  package.path = package.path .. ";./mod/?.lua;./mod/?/init.lua"
+
   _G.serpent = mock({
     -- luacheck: no unused args
     block = function(value, options)
@@ -7,7 +10,7 @@ insulate("[UNIT] serializer", function()
   })
 
   _G._TEST = true
-  local serializer = require("mod.serializer")
+  local serializer = require("serializer")
 
   it("should call serpent.block()", function()
     local test_table = {key = "value"}
@@ -65,8 +68,11 @@ insulate("[UNIT] serializer", function()
 end)
 
 insulate("[INTEGRATION] serializer", function()
+  -- Extend package.path to simulate Factorio's module root behavior
+  package.path = package.path .. ";./mod/?.lua;./mod/?/init.lua"
+
   _G.serpent = require("serpent")
-  local serializer = require("mod.serializer")
+  local serializer = require("serializer")
 
   it("should handle non-table values", function()
     local result = serializer({test = "simple"})

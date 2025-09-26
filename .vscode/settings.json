@@ -28,10 +28,12 @@
     "settings",
     "stds",
     "storage",
-    "util"
+    "util",
+    "os",
+    "io",
+    "_TEST"
   ],
   "Lua.diagnostics.disable": [
     "lowercase-global"
   ]
 }
-

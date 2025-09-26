@@ -2,5 +2,9 @@ return {
   modules = {
     -- mod
     ["serializer"] = "mod/serializer.lua",
+    ["data-raw-generator"] = "mod/prototype/data-raw-generator.lua",
+    ["feature-flags-generator"] = "mod/prototype/feature-flags-generator.lua",
+    ["mods-generator"] = "mod/prototype/mods-generator.lua",
+    ["settings-generator"] = "mod/prototype/settings-generator.lua",
   },
 }

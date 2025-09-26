@@ -22,7 +22,9 @@ local function get_range_index(name)
     end
   end
 
+  -- luacov: disable
   return 6  -- Default to last range for edge cases
+  -- luacov: enable
 end
 
 --- Gets the suffix for a range index

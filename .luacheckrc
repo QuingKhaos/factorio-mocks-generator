@@ -2,8 +2,6 @@ stds.TEST = {
   globals = {"_TEST"}
 }
 
-std = "lua52+TEST"
-
 -- Files and directories to check
 include_files = {
   "mod/**/*.lua",
@@ -18,6 +16,7 @@ include_files = {
 
 -- Specific overrides for different file types
 files["mod/**/*.lua"] = {
+  std = "+TEST",
   globals = {
     "commands",
     "data",
@@ -34,16 +33,21 @@ files["mod/**/*.lua"] = {
     "serpent",
     "settings",
     "storage",
-    "util"
-  }
+    "util",
+  },
 }
 
+files["spec/mod/**/*.lua"] = files["mod/**/*.lua"]
+files["spec/mod/**/*.lua"].std = "+lua52+TEST"
+
 files["bin/**/*.lua"] = {
-  globals = {"arg"}
+  std = "lua52",
+  globals = {"arg"},
 }
 
 files["src/**/*.lua"] = {
-  globals = {}
+  std = "lua52",
+  globals = {},
 }
 
 -- Code quality settings
