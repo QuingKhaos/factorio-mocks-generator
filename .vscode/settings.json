@@ -7,5 +7,30 @@
   },
   "search.exclude": {
     "**/.git": true
-  }
+  },
+  "search.useIgnoreFiles": false,
+  "Lua.runtime.version": "Lua 5.2",
+  "Lua.diagnostics.globals": [
+    "commands",
+    "data",
+    "defines",
+    "feature_flags",
+    "files",
+    "game",
+    "helpers",
+    "log",
+    "mods",
+    "prototypes",
+    "rcon",
+    "rendering",
+    "remote",
+    "serpent",
+    "settings",
+    "storage",
+    "util"
+  ],
+  "Lua.diagnostics.disable": [
+    "lowercase-global"
+  ]
 }
+

@@ -53,7 +53,17 @@ The generator requires specific Factorio configuration for data extraction:
    cd factorio-mocks-generator
    ```
 
-2. **Set Up Development Environment**
+2. **Link `mod` to `.factorio/mods`**
+
+   ```bash
+   # Linux/macOS - create symbolic link:
+   ln --symbolic --relative $(pwd)/mod $(pwd)/.factorio/mods/factorio-mocks-generator
+
+   # Windows - create junction link:
+   cmd /c "mklink /J .factorio\mods\factorio-mocks-generator mod"
+   ```
+
+3. **Set Up Development Environment**
 
    ```bash
    # Install documentation tools
@@ -66,7 +76,7 @@ The generator requires specific Factorio configuration for data extraction:
    factorio --version
    ```
 
-3. **Review Project Structure**
+4. **Review Project Structure**
    - Read `README.md` for generator overview
    - Review [ecosystem documentation](https://github.com/QuingKhaos/factorio-mocks)
    - Understand data extraction architecture
@@ -85,7 +95,8 @@ The generator requires specific Factorio configuration for data extraction:
 2. **Test Extraction Setup**:
 
    ```bash
-   # TODO: Add specific commands to run local extraction tests
+   # Run factorio with instrument mod to extract data
+   factorio --config .factorio/config/config.ini --instrument-mod factorio-mocks-generator --load-scenario base/freeplay
    ```
 
 ### Development Tools Setup

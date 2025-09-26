@@ -1,2 +1,7 @@
 .github/logs/*
 .github/drafts/pull-requests/*
+
+.factorio/*
+!.factorio/config/
+.factorio/config/*
+!.factorio/config/config.ini
