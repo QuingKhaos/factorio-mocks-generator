@@ -5,6 +5,12 @@
 !.factorio/config/
 .factorio/config/*
 !.factorio/config/config.ini
+!.factorio/data/
+.factorio/data/*
+!.factorio/data/server-settings.json
+!.factorio/mods/
+.factorio/mods/*
+!.factorio/mods/mod-list.json
 
 luacov.stats.out
 luacov.report.out

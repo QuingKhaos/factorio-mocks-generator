@@ -1,4 +1,4 @@
-insulate("[UNIT] mods-generator", function()
+insulate("[#UNIT] mods-generator", function()
   -- Extend package.path to simulate Factorio's module root behavior
   package.path = package.path .. ";./mod/?.lua;./mod/?/init.lua"
 

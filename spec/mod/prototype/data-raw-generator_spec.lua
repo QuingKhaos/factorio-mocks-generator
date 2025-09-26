@@ -1,4 +1,4 @@
-insulate("[UNIT] data-raw-generator", function()
+insulate("[#UNIT] data-raw-generator", function()
   -- Extend package.path to simulate Factorio's module root behavior
   package.path = package.path .. ";./mod/?.lua;./mod/?/init.lua"
 
@@ -178,7 +178,7 @@ insulate("[UNIT] data-raw-generator", function()
   end)
 end)
 
-insulate("[INTEGRATION] data-raw-generator", function()
+insulate("[#INTEGRATION] data-raw-generator", function()
   -- Extend package.path to simulate Factorio's module root behavior
   package.path = package.path .. ";./mod/?.lua;./mod/?/init.lua"
   _G.serpent = require("serpent")

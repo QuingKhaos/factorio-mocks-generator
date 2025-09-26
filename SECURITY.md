@@ -34,22 +34,9 @@ Please include as much information as possible:
 
 ## Security Considerations
 
-The Factorio Mocks Generator is a comprehensive extraction and validation pipeline that orchestrates Factorio execution,
-processes game data, validates against API schemas, and extracts localization files.
-
-### Architecture Overview
-
-- **Rule Generation**: `lua bin/generator.lua build-rules <factorio-version>` - Generates LIVR rules from Factorio JSON API
-- **Data Extraction**: `lua bin/generator.lua extract-and-validate <path-to-factorio>` - Main extraction process
-- **Process Control**: Starts Factorio with instrument mode, captures stdout, manages termination
-- **Data Pipeline**: Extracts prototype data (stdout) and runtime data (script-output directory)
-- **Validation**: Validates extracted data against pre-generated LIVR rules
-- **Locale Processing**: Extracts .cfg files from mod ZIP archives
-
 ### Security Features
 
-- **Factorio Sandbox**: Game data extraction runs within Factorio's Lua sandbox
-- **Process Isolation**: Factorio runs as separate process with controlled termination
+- **Factorio Sandbox**: Game data extraction runs within Factorio's Lua sandboxed environment
 - **Controlled File Access**: Reads from script-output and mod directories, validates paths
 - **Network Boundaries**: API access limited to Factorio JSON API for LIVR rule generation (build-rules command only)
 - **Output Validation**: All extracted data validated against pre-generated LIVR rules
@@ -64,7 +51,6 @@ processes game data, validates against API schemas, and extracts localization fi
 
 ### For Contributors
 
-- **Process Safety**: Ensure proper Factorio process termination in all code paths
 - **Path Validation**: Validate all file system paths before operations
 - **ZIP Security**: Use safe extraction methods to prevent path traversal attacks
 - **API Security**: Implement error handling for JSON API access (build-rules command)

@@ -100,8 +100,8 @@ The generator requires specific Factorio configuration for data extraction:
 2. **Test Extraction Setup**:
 
    ```bash
-   # Run factorio with instrument mod to extract data
-   factorio --config .factorio/config/config.ini --instrument-mod factorio-mocks-generator --load-scenario base/freeplay
+   # Run factorio to extract data
+   factorio --config .factorio/config/config.ini --load-scenario base/freeplay
    ```
 
 ### Development Tools Setup

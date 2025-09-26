@@ -30,6 +30,7 @@ files["mod/**/*.lua"] = {
     "rcon",
     "rendering",
     "remote",
+    "script",
     "serpent",
     "settings",
     "storage",

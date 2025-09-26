@@ -1,4 +1,4 @@
-insulate("[UNIT] serializer", function()
+insulate("[#UNIT] serializer", function()
   -- Extend package.path to simulate Factorio's module root behavior
   package.path = package.path .. ";./mod/?.lua;./mod/?/init.lua"
 
@@ -67,7 +67,7 @@ insulate("[UNIT] serializer", function()
   end)
 end)
 
-insulate("[INTEGRATION] serializer", function()
+insulate("[#INTEGRATION] serializer", function()
   -- Extend package.path to simulate Factorio's module root behavior
   package.path = package.path .. ";./mod/?.lua;./mod/?/init.lua"
 

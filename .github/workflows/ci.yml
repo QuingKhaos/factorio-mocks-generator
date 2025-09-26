@@ -8,34 +8,172 @@ on:
 
 jobs:
   mod-tests:
-    name: Mod Tests (Lua 5.2, Linux)
+    name: Complete Generator Unit & Integration Tests (Lua 5.2, Linux)
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v5
+      - name: Checkout code
+        uses: actions/checkout@v5
 
-    - name: Install Lua 5.2
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y lua5.2 liblua5.2-dev luarocks
+      - name: Install Lua 5.2
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lua5.2 liblua5.2-dev luarocks
 
-    - name: Install dev dependencies
-      run: |
-        sudo luarocks install --only-deps factorio-mocks-generator-dev-1.rockspec
+      - name: Install dev dependencies
+        run: |
+          sudo luarocks install --only-deps factorio-mocks-generator-dev-1.rockspec
 
-    - name: Run mod tests with coverage
-      run: busted --output=TAP --run=mod
+      - name: Run mod unit tests with coverage
+        run: busted --output=TAP --run=mod --tags=UNIT
 
-    - name: Generate coverage report
-      run: luacov
+      - name: Run mod integration tests with coverage
+        run: busted --output=TAP --run=mod --tags=INTEGRATION
 
-    - name: Display coverage report
-      run: cat luacov.report.out
+      - name: Generate coverage report
+        run: luacov
 
-    - name: Upload coverage results
-      uses: actions/upload-artifact@v4
-      with:
-        name: mod-coverage-report
-        path: |
-          luacov.report.out
+      - name: Display coverage report
+        run: cat luacov.report.out
+
+      - name: Upload coverage results
+        uses: actions/upload-artifact@v4
+        with:
+          name: mod-coverage-report
+          path: |
+            luacov.report.out
+
+      - name: Download headless Factorio
+        run: |
+          echo "Downloading headless Factorio..."
+          curl -L -o factorio-headless.tar.xz "https://factorio.com/get-download/stable/headless/linux64"
+
+          echo "Extracting Factorio..."
+          tar -xf factorio-headless.tar.xz
+
+      - name: Set up Factorio environment
+        run: |
+          echo "Creating mods directory and symbolic link..."
+          mkdir -p .factorio/mods
+          ln --symbolic --relative $(pwd)/mod $(pwd)/.factorio/mods/factorio-mocks-generator
+
+      - name: Run Factorio data extraction
+        timeout-minutes: 5
+        run: |
+          echo "Starting Factorio for data extraction..."
+
+          # Create log file for Factorio output
+          FACTORIO_LOG="factorio_output.log"
+
+          # Start Factorio in true headless mode with stdin redirected
+          ./factorio/bin/x64/factorio \
+            --config=.factorio/config/config.ini \
+            --start-server-load-scenario base/freeplay \
+            --server-settings .factorio/data/server-settings.json \
+            2>&1 | tee "$FACTORIO_LOG" &
+
+          FACTORIO_PID=$!
+          echo "Factorio started with PID: $FACTORIO_PID"
+
+          # Monitor for completion message in stdout
+          echo "Waiting for DATA GENERATION FINISHED message..."
+          timeout 300 bash -c '
+            while true; do
+              if ps -p '$FACTORIO_PID' > /dev/null 2>&1; then
+                # Check stdout capture for completion message
+                if grep -q "DATA GENERATION FINISHED" "'$FACTORIO_LOG'" 2>/dev/null; then
+                  echo "Data generation completed - found completion message!"
+                  break
+                fi
+                sleep 2
+              else
+                echo "Factorio process ended naturally"
+                # Check one more time in case process ended after writing
+                if grep -q "DATA GENERATION FINISHED" "'$FACTORIO_LOG'" 2>/dev/null; then
+                  echo "Data generation completed - found completion message after process end!"
+                else
+                  echo "WARNING: Factorio ended without completion message"
+                  echo "Last 20 lines of Factorio output:"
+                  tail -20 "'$FACTORIO_LOG'" || true
+                fi
+                break
+              fi
+            done
+          '
+
+          # Ensure Factorio is terminated
+          if ps -p $FACTORIO_PID > /dev/null 2>&1; then
+            echo "Terminating Factorio process..."
+            kill $FACTORIO_PID
+
+            sleep 5
+            kill -9 $FACTORIO_PID 2>/dev/null || true
+          fi
+
+          echo "Factorio data extraction completed"
+
+      - name: Validate extracted data
+        run: |
+          echo "Validating extracted data..."
+
+          # Check if data was generated
+          if [ ! -d ".factorio/script-output/factorio-mocks-generator" ]; then
+            echo "ERROR: No script-output directory found"
+            exit 1
+          fi
+
+          # Count extracted files
+          lua_files=$(find .factorio/script-output/factorio-mocks-generator -name "*.lua" | wc -l)
+          echo "Found $lua_files Lua data files"
+
+          if [ $lua_files -lt 10 ]; then
+            echo "ERROR: Too few data files generated (expected at least 10)"
+            exit 1
+          fi
+
+          # Validate key files exist
+          key_files=(
+            ".factorio/script-output/factorio-mocks-generator/prototype/data-raw.lua"
+            ".factorio/script-output/factorio-mocks-generator/prototype/mods.lua"
+            ".factorio/script-output/factorio-mocks-generator/prototype/settings.lua"
+            ".factorio/script-output/factorio-mocks-generator/prototype/feature_flags.lua"
+          )
+
+          for file in "${key_files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "ERROR: Required file missing: $file"
+              exit 1
+            fi
+
+            # Validate Lua syntax
+            if ! luac -p "$file" 2>/dev/null; then
+              echo "ERROR: Invalid Lua syntax in: $file"
+              exit 1
+            fi
+
+            echo "✓ Valid: $file"
+          done
+
+          echo "All data validation checks passed!"
+
+      - name: Display extraction summary
+        if: always()
+        run: |
+          echo "=== Factorio Data Extraction Summary ==="
+
+          if [ -d ".factorio/script-output/factorio-mocks-generator" ]; then
+            echo "✅ Data extraction successful"
+            echo "📁 Total files: $(find .factorio/script-output/factorio-mocks-generator -type f | wc -l)"
+            echo "🗂️  Lua files: $(find .factorio/script-output/factorio-mocks-generator -name "*.lua" | wc -l)"
+            echo "📊 Directory size: $(du -sh .factorio/script-output/factorio-mocks-generator | cut -f1)"
+          else
+            echo "❌ Data extraction failed"
+          fi
+
+      - name: Upload extracted data
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: extracted-factorio-data
+          path: .factorio/script-output/factorio-mocks-generator/
+          retention-days: 30
