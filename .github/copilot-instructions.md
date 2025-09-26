@@ -45,7 +45,7 @@ factorio-mocks-generator/
 
 **Entry Point**: `bin/generator.lua` with subcommands for different extraction types
 **Usage Context**: Designed for CI/CD automation but supports manual developer usage
-**GitHub Actions**: Headless Factorio execution with `--instrument-mod` parameter
+**GitHub Actions**: Headless Factorio execution in CI to run extraction and temporarily push artifacts to `factorio-mocks-data`
 
 ### Ecosystem Integration
 

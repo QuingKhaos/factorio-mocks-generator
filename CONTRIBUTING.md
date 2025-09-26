@@ -28,14 +28,19 @@ engine that generates mock data from Factorio installations.
 - **GitHub Account**: For collaboration
 - **GitHub CLI** (recommended): For easier repository management
 - **Factorio**: at least version 2.0.66 installed
-- **Lua 5.2**: For local development and testing (matches Factorio's version)
+- **Lua**: Lua 5.2 or Lua 5.4 interpreter for local testing
+- **LuaRocks**: For Lua dependency management
 - **Text Editor/IDE**: VS Code recommended with Lua extensions
 
 **Development Tools:**
 
 - **markdownlint-cli**: For documentation linting (`npm install -g markdownlint-cli`)
-- **Lua**: Lua 5.2 interpreter for local testing
-- **LuaRocks**: For Lua dependency management
+
+**Windows-Specific Setup:**
+
+If you're on Windows and need to set up a complete Lua development environment with native compilation support,
+see the [Windows Lua Setup Guide](https://gist.github.com/QuingKhaos/9181110762b3a0367ea2e49764f9195e) which covers
+Lua 5.4 + LuaRocks + MinGW-w64 installation.
 
 ### Factorio Setup Requirements
 
@@ -53,7 +58,17 @@ The generator requires specific Factorio configuration for data extraction:
    cd factorio-mocks-generator
    ```
 
-2. **Set Up Development Environment**
+2. **Link `mod` to `.factorio/mods`**
+
+   ```bash
+   # Linux/macOS - create symbolic link:
+   ln --symbolic --relative $(pwd)/mod $(pwd)/.factorio/mods/factorio-mocks-generator
+
+   # Windows - create junction link:
+   cmd /c "mklink /J .factorio\mods\factorio-mocks-generator mod"
+   ```
+
+3. **Set Up Development Environment**
 
    ```bash
    # Install documentation tools
@@ -66,7 +81,7 @@ The generator requires specific Factorio configuration for data extraction:
    factorio --version
    ```
 
-3. **Review Project Structure**
+4. **Review Project Structure**
    - Read `README.md` for generator overview
    - Review [ecosystem documentation](https://github.com/QuingKhaos/factorio-mocks)
    - Understand data extraction architecture
@@ -85,7 +100,8 @@ The generator requires specific Factorio configuration for data extraction:
 2. **Test Extraction Setup**:
 
    ```bash
-   # TODO: Add specific commands to run local extraction tests
+   # Run factorio to extract data
+   factorio --config .factorio/config/config.ini --load-scenario base/freeplay
    ```
 
 ### Development Tools Setup
@@ -101,6 +117,32 @@ The generator requires specific Factorio configuration for data extraction:
 - Lua language server
 - Factorio Modding Tool Kit
 - markdownlint
+
+For optional but full IntelliSense support, follow these steps:
+
+1. Enable [Manage Library Data Links](vscode://settings/factorio.workspace.manageLibraryDataLinks) in the workspace settings.
+
+2. **Select Factorio version** to link to the correct data files:
+   - Open Command Palette (`Ctrl+Shift+P`)
+   - Run: `Factorio: Select Version`
+
+3. Add the path to installed LuaRocks libraries (e.g. `C:\Users\<username>\AppData\Roaming/luarocks/share/lua/5.4`) to
+   the [`Lua.workspace.library`](vscode://settings/Lua.workspace.library) workspace setting.
+
+4. Enable the following libs via **LLS-Addons**:
+   - Open Command Palette (`Ctrl+Shift+P`)
+   - Run: `Lua: Open Addon Manager`
+   - Enable:
+     - busted
+     - luassert
+
+   Choose `factorio-mocks-generator` to enable these libraries. This will modify the projects `.vscode/settings.json`.
+   You need to move these changes to the workspace settings file to avoid committing them:
+
+   - Open Command Palette (`Ctrl+Shift+P`)
+   - Run: `Preferences: Open Workspace Settings (JSON)`
+   - Merge the content of the projects `Lua.workspace.library` with your workspaces `Lua.workspace.library` setting.
+   - Discard any changes to `.vscode/settings.json` via `git restore .vscode/settings.json`.
 
 ## Development Workflow
 
@@ -129,6 +171,9 @@ The generator requires specific Factorio configuration for data extraction:
    ```bash
    # Run documentation linting
    markdownlint --config .markdownlint.json --dot **/*.md
+
+   # Run code linting
+   luacheck .
    ```
 
 4. **Commit and Push**
