@@ -1,0 +1,6 @@
+return {
+  modules = {
+    -- mod
+    ["serializer"] = "mod/serializer.lua",
+  },
+}

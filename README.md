@@ -1,4 +1,5 @@
-[![GitHub build status: Quality Assurance](https://img.shields.io/github/actions/workflow/status/QuingKhaos/factorio-mocks-generator/qa.yml?branch=main&label=QA&style=for-the-badge)](https://github.com/QuingKhaos/factorio-mocks-generator/actions?query=workflow%3A%22Quality+Assurance%22)
+[![GitHub build status: CI](https://img.shields.io/github/actions/workflow/status/QuingKhaos/factorio-mocks-generator/ci.yml?branch=main&label=CI&style=for-the-badge)](https://github.com/QuingKhaos/factorio-mocks-generator/actions/workflows/ci.yml)
+[![GitHub build status: Quality Assurance](https://img.shields.io/github/actions/workflow/status/QuingKhaos/factorio-mocks-generator/qa.yml?branch=main&label=QA&style=for-the-badge)](https://github.com/QuingKhaos/factorio-mocks-generator/actions/workflows/qa.yml)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/QuingKhaos/factorio-mocks-generator?label=Pull%20Requests&style=for-the-badge)](https://github.com/QuingKhaos/factorio-mocks-generator/pulls)
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-support%20me-hotpink?logo=kofi&logoColor=white&style=for-the-badge)](https://ko-fi.com/quingkhaos)
 

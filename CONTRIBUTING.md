@@ -118,6 +118,32 @@ The generator requires specific Factorio configuration for data extraction:
 - Factorio Modding Tool Kit
 - markdownlint
 
+For optional but full IntelliSense support, follow these steps:
+
+1. Enable [Manage Library Data Links](vscode://settings/factorio.workspace.manageLibraryDataLinks) in the workspace settings.
+
+2. **Select Factorio version** to link to the correct data files:
+   - Open Command Palette (`Ctrl+Shift+P`)
+   - Run: `Factorio: Select Version`
+
+3. Add the path to installed LuaRocks libraries (e.g. `C:\Users\<username>\AppData\Roaming/luarocks/share/lua/5.4`) to
+   the [`Lua.workspace.library`](vscode://settings/Lua.workspace.library) workspace setting.
+
+4. Enable the following libs via **LLS-Addons**:
+   - Open Command Palette (`Ctrl+Shift+P`)
+   - Run: `Lua: Open Addon Manager`
+   - Enable:
+     - busted
+     - luassert
+
+   Choose `factorio-mocks-generator` to enable these libraries. This will modify the projects `.vscode/settings.json`.
+   You need to move these changes to the workspace settings file to avoid committing them:
+
+   - Open Command Palette (`Ctrl+Shift+P`)
+   - Run: `Preferences: Open Workspace Settings (JSON)`
+   - Merge the content of the projects `Lua.workspace.library` with your workspaces `Lua.workspace.library` setting.
+   - Discard any changes to `.vscode/settings.json` via `git restore .vscode/settings.json`.
+
 ## Development Workflow
 
 ### Branch Strategy

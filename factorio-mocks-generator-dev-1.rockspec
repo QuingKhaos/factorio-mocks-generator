@@ -13,7 +13,10 @@ description = {
 }
 dependencies = {
   "lua >= 5.2",
+  "busted",
   "luacheck",
+  "luacov",
+  "serpent",
 }
 build = {
   type = "builtin",

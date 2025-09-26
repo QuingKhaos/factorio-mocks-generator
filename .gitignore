@@ -5,3 +5,6 @@
 !.factorio/config/
 .factorio/config/*
 !.factorio/config/config.ini
+
+luacov.stats.out
+luacov.report.out
