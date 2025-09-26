@@ -28,14 +28,19 @@ engine that generates mock data from Factorio installations.
 - **GitHub Account**: For collaboration
 - **GitHub CLI** (recommended): For easier repository management
 - **Factorio**: at least version 2.0.66 installed
-- **Lua 5.2**: For local development and testing (matches Factorio's version)
+- **Lua**: Lua 5.2 or Lua 5.4 interpreter for local testing
+- **LuaRocks**: For Lua dependency management
 - **Text Editor/IDE**: VS Code recommended with Lua extensions
 
 **Development Tools:**
 
 - **markdownlint-cli**: For documentation linting (`npm install -g markdownlint-cli`)
-- **Lua**: Lua 5.2 interpreter for local testing
-- **LuaRocks**: For Lua dependency management
+
+**Windows-Specific Setup:**
+
+If you're on Windows and need to set up a complete Lua development environment with native compilation support,
+see the [Windows Lua Setup Guide](https://gist.github.com/QuingKhaos/9181110762b3a0367ea2e49764f9195e) which covers
+Lua 5.4 + LuaRocks + MinGW-w64 installation.
 
 ### Factorio Setup Requirements
 
@@ -140,6 +145,9 @@ The generator requires specific Factorio configuration for data extraction:
    ```bash
    # Run documentation linting
    markdownlint --config .markdownlint.json --dot **/*.md
+
+   # Run code linting
+   luacheck .
    ```
 
 4. **Commit and Push**

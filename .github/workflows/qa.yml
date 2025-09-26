@@ -157,3 +157,68 @@ jobs:
           fi
 
           echo "✅ Configuration synchronization check completed"
+
+  lua-quality:
+    runs-on: ubuntu-latest
+    name: Lua Code Quality
+    strategy:
+      matrix:
+        lua-version: ['5.2', '5.4']
+      fail-fast: false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Install Lua ${{ matrix.lua-version }} and luacheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lua${{ matrix.lua-version }} liblua${{ matrix.lua-version }}-dev luarocks
+          sudo luarocks install luacheck
+
+      - name: Check Lua files exist
+        run: |
+          echo "🔍 Checking for Lua files..."
+
+          if find . -name "*.lua" -not -path "./.git/*" | head -1 | grep -q .; then
+            echo "✅ Lua files found"
+            find . -name "*.lua" -not -path "./.git/*" | head -10
+          else
+            echo "⚠️  No Lua files found to check"
+            exit 0
+          fi
+
+      - name: Lint Lua files with luacheck
+        run: |
+          echo "🔍 Linting Lua files with luacheck..."
+
+          if [ -f ".luacheckrc" ]; then
+            echo "Using .luacheckrc configuration"
+            luacheck . || {
+              echo "❌ Lua linting failed"
+              echo "💡 Run 'luacheck .' locally to see detailed errors"
+              exit 1
+            }
+          else
+            echo "❌ No .luacheckrc found, please add one to configure luacheck"
+            exit 1
+          fi
+
+          echo "✅ Lua linting completed"
+
+      - name: Check Lua syntax
+        run: |
+          echo "🔍 Checking Lua syntax with luac${{ matrix.lua-version }}..."
+
+          find . -name "*.lua" -not -path "./.git/*" | while read -r file; do
+            echo "Checking syntax: $file"
+            if luac${{ matrix.lua-version }} -p "$file" 2>/dev/null; then
+              echo "✅ $file syntax OK"
+            else
+              echo "❌ $file has syntax errors:"
+              luac${{ matrix.lua-version }} -p "$file"
+              exit 1
+            fi
+          done
+
+          echo "✅ Lua syntax check completed"
