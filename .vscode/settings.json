@@ -6,6 +6,42 @@
     "**/.git": true
   },
   "search.exclude": {
-    "**/.git": true
-  }
+    "**/.git": true,
+    "vendor": true
+  },
+  "search.useIgnoreFiles": false,
+  "Lua.runtime.path": [
+    "mods/?.lua",
+    "mods/?/init.lua",
+    "src/?.lua",
+    "src/?/init.lua"
+  ],
+  "Lua.runtime.pathStrict": true,
+  "Lua.runtime.version": "Lua 5.4",
+  "Lua.diagnostics.globals": [
+    "commands",
+    "data",
+    "defines",
+    "feature_flags",
+    "files",
+    "game",
+    "helpers",
+    "log",
+    "mods",
+    "prototypes",
+    "rcon",
+    "rendering",
+    "remote",
+    "serpent",
+    "settings",
+    "stds",
+    "storage",
+    "util",
+    "os",
+    "io",
+    "_TEST"
+  ],
+  "Lua.diagnostics.disable": [
+    "lowercase-global"
+  ]
 }

@@ -1,0 +1,27 @@
+return {
+  exclude = {
+    "spec$",
+    "spec%/.+$",
+  },
+  modules = {
+    -- Mods (luacov sees the mods somehow as `modname` instead of `__modname__`)
+    ["factorio-mocks-generator.prototype.data-raw-generator"] = "mods/factorio-mocks-generator/prototype/data-raw-generator.lua",
+    ["factorio-mocks-generator.prototype.feature-flags-generator"] = "mods/factorio-mocks-generator/prototype/feature-flags-generator.lua",
+    ["factorio-mocks-generator.prototype.mods-generator"] = "mods/factorio-mocks-generator/prototype/mods-generator.lua",
+    ["factorio-mocks-generator.prototype.settings-generator"] = "mods/factorio-mocks-generator/prototype/settings-generator.lua",
+    ["factorio-mocks-generator.serializer"] = "mods/factorio-mocks-generator/serializer.lua",
+    -- Generator
+    ["factorio-mocks-generator.LIVR.rules.*"] = "src",
+    ["factorio-mocks-generator.LIVR.rules"] = "src/factorio-mocks-generator/LIVR/rules/init.lua",
+    ["factorio-mocks-generator.LIVR.*"] = "src",
+    ["factorio-mocks-generator.LIVR"] = "src/factorio-mocks-generator/LIVR/init.lua",
+    ["factorio-mocks-generator.prototype-rules.default-extractors.*"] = "src",
+    ["factorio-mocks-generator.prototype-rules.default-extractors"] = "src/factorio-mocks-generator/prototype-rules/default-extractors/init.lua",
+    ["factorio-mocks-generator.prototype-rules.post-processors.prototypes.*"] = "src",
+    ["factorio-mocks-generator.prototype-rules.post-processors.types.*"] = "src",
+    ["factorio-mocks-generator.prototype-rules.post-processors.*"] = "src",
+    ["factorio-mocks-generator.prototype-rules.*"] = "src",
+    ["factorio-mocks-generator.validator-output.*"] = "src",
+    ["factorio-mocks-generator.*"] = "src",
+  },
+}

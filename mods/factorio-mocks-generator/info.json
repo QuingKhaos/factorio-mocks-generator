@@ -1,0 +1,15 @@
+{
+  "name": "factorio-mocks-generator",
+  "title": "Factorio Mocks Generator",
+  "description": "Data Extraction for Mod Testing",
+  "author": "QuingKhaos",
+  "homepage": "",
+  "version": "0.1.0",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base >= 2.0.69",
+    "? elevated-rails",
+    "? quality",
+    "? space-age"
+  ]
+}
