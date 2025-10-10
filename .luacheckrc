@@ -4,18 +4,17 @@ stds.TEST = {
 
 -- Files and directories to check
 include_files = {
-  "mod/**/*.lua",
-  "src/**/*.lua",
   "bin/**/*.lua",
+  "src/**/*.lua",
+  "mods/**/*.lua",
   "spec/**/*.lua",
   ".busted",
   ".luacheckrc",
-  ".luacov",
   "*.rockspec",
 }
 
 -- Specific overrides for different file types
-files["mod/**/*.lua"] = {
+files["mods/**/*.lua"] = {
   std = "+TEST",
   globals = {
     "commands",
@@ -38,19 +37,28 @@ files["mod/**/*.lua"] = {
   },
 }
 
-files["spec/mod/**/*.lua"] = files["mod/**/*.lua"]
-files["spec/mod/**/*.lua"].std = "+lua52+TEST"
+files["spec/mods/**/*.lua"] = files["mods/**/*.lua"]
+files["spec/mods/**/*.lua"].std = "+lua54+TEST"
 
 files["bin/**/*.lua"] = {
-  std = "lua52",
-  globals = {"arg"},
+  std = "lua54",
 }
 
 files["src/**/*.lua"] = {
-  std = "lua52",
-  globals = {},
+  std = "lua54+TEST",
+}
+
+files["src/**/definitions/**/*.lua"] = files["src/**/*.lua"]
+files["src/**/definitions/**/*.lua"].unused = false
+
+files["spec/src/**/*.lua"] = files["src/**/*.lua"]
+files["spec/src/**/*.lua"].std = "+lua54+TEST"
+
+files["spec/*.lua"] = {
+  std = "lua54",
 }
 
 -- Code quality settings
 max_line_length = 120
-max_code_line_length = 120
+max_comment_line_length = false
+max_string_line_length = false

@@ -6,10 +6,18 @@
     "**/.git": true
   },
   "search.exclude": {
-    "**/.git": true
+    "**/.git": true,
+    "vendor": true
   },
   "search.useIgnoreFiles": false,
-  "Lua.runtime.version": "Lua 5.2",
+  "Lua.runtime.path": [
+    "mods/?.lua",
+    "mods/?/init.lua",
+    "src/?.lua",
+    "src/?/init.lua"
+  ],
+  "Lua.runtime.pathStrict": true,
+  "Lua.runtime.version": "Lua 5.4",
   "Lua.diagnostics.globals": [
     "commands",
     "data",

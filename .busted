@@ -1,9 +1,13 @@
 return {
   _all = {
     coverage = true,
+    helper = "spec/init.lua",
     output = "plainTerminal",
   },
-  mod = {
-    ROOT = {"spec/mod"}
+  generator = {
+    ROOT = {"spec/src"},
+  },
+  mods = {
+    ROOT = {"spec/mods"}
   },
 }

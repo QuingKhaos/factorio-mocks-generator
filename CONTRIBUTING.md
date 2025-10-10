@@ -10,7 +10,6 @@ engine that generates mock data from Factorio installations.
 - [Development Environment Setup](#development-environment-setup)
 - [Development Workflow](#development-workflow)
 - [Coding Standards](#coding-standards)
-- [Testing Guidelines](#testing-guidelines)
 - [Documentation Guidelines](#documentation-guidelines)
 - [Generator-Specific Considerations](#generator-specific-considerations)
 - [Issue and Pull Request Process](#issue-and-pull-request-process)
@@ -27,8 +26,8 @@ engine that generates mock data from Factorio installations.
 - **Git**: For version control
 - **GitHub Account**: For collaboration
 - **GitHub CLI** (recommended): For easier repository management
-- **Factorio**: at least version 2.0.66 installed
-- **Lua**: Lua 5.2 or Lua 5.4 interpreter for local testing
+- **Factorio**: at least version 2.0.69 installed
+- **Lua**: Lua 5.4 interpreter for local testing
 - **LuaRocks**: For Lua dependency management
 - **Text Editor/IDE**: VS Code recommended with Lua extensions
 
@@ -42,13 +41,6 @@ If you're on Windows and need to set up a complete Lua development environment w
 see the [Windows Lua Setup Guide](https://gist.github.com/QuingKhaos/9181110762b3a0367ea2e49764f9195e) which covers
 Lua 5.4 + LuaRocks + MinGW-w64 installation.
 
-### Factorio Setup Requirements
-
-The generator requires specific Factorio configuration for data extraction:
-
-1. **Factorio Installation**: Steam, standalone or headless version
-2. **Instrument Mode**: All installations must run with `--instrument-mod` flag for data extraction
-
 ### First-Time Setup
 
 1. **Fork and Clone Repository**
@@ -58,14 +50,14 @@ The generator requires specific Factorio configuration for data extraction:
    cd factorio-mocks-generator
    ```
 
-2. **Link `mod` to `.factorio/mods`**
+2. **Link the mods in `mods/` to `.factorio/mods/`**
 
    ```bash
    # Linux/macOS - create symbolic link:
-   ln --symbolic --relative $(pwd)/mod $(pwd)/.factorio/mods/factorio-mocks-generator
+   ln --symbolic --relative $(pwd)/mods/factorio-mocks-generator $(pwd)/.factorio/mods/factorio-mocks-generator
 
    # Windows - create junction link:
-   cmd /c "mklink /J .factorio\mods\factorio-mocks-generator mod"
+   cmd /c "mklink /J .factorio\mods\factorio-mocks-generator mods\factorio-mocks-generator"
    ```
 
 3. **Set Up Development Environment**
@@ -74,14 +66,22 @@ The generator requires specific Factorio configuration for data extraction:
    # Install documentation tools
    npm install -g markdownlint-cli
 
-   # Verify Lua installation (should be 5.2.x)
+   # Verify Lua and LuaRocks installation
    lua -v
+   luarocks --version
 
    # Verify Factorio installation
    factorio --version
    ```
 
-4. **Review Project Structure**
+4. **Install Dependencies**:
+
+   ```bash
+   # Install Lua dependencies using rockspec
+   luarocks install --tree vendor --only-deps factorio-mocks-generator-dev-1.rockspec
+   ```
+
+5. **Review Project Structure**
    - Read `README.md` for generator overview
    - Review [ecosystem documentation](https://github.com/QuingKhaos/factorio-mocks)
    - Understand data extraction architecture
@@ -90,25 +90,30 @@ The generator requires specific Factorio configuration for data extraction:
 
 ### Local Testing Environment
 
-1. **Install Dependencies**:
-
-   ```bash
-   # Install Lua dependencies using rockspec
-   luarocks install --only-deps factorio-mocks-generator-dev-1.rockspec
-   ```
-
-2. **Test Extraction Setup**:
+1. **Test Extraction Setup**:
 
    ```bash
    # Run factorio to extract data
    factorio --config .factorio/config/config.ini --load-scenario base/freeplay
    ```
 
+2. **Generate LIVR rules**:
+
+   ```bash
+   lua -lpaths bin/factorio-mocks-generator.lua generate-livr-rules stable
+   ```
+
+3. **Validate extracted data**:
+
+   ```bash
+   lua -lpaths bin/factorio-mocks-generator.lua validate .factorio/script-output
+   ```
+
 ### Development Tools Setup
 
 **Required for Development:**
 
-- Lua 5.2 interpreter for local script testing
+- Lua 5.4 interpreter for local testing
 - Text editor with Lua syntax highlighting
 - Git with proper configuration for commits
 
@@ -126,14 +131,16 @@ For optional but full IntelliSense support, follow these steps:
    - Open Command Palette (`Ctrl+Shift+P`)
    - Run: `Factorio: Select Version`
 
-3. Add the path to installed LuaRocks libraries (e.g. `C:\Users\<username>\AppData\Roaming/luarocks/share/lua/5.4`) to
+3. Add the LuaRocks vendor path `vendor/share/lua/5.4` to
    the [`Lua.workspace.library`](vscode://settings/Lua.workspace.library) workspace setting.
 
 4. Enable the following libs via **LLS-Addons**:
    - Open Command Palette (`Ctrl+Shift+P`)
    - Run: `Lua: Open Addon Manager`
    - Enable:
+     - argparse
      - busted
+     - CJSON
      - luassert
 
    Choose `factorio-mocks-generator` to enable these libraries. This will modify the projects `.vscode/settings.json`.
@@ -173,7 +180,10 @@ For optional but full IntelliSense support, follow these steps:
    markdownlint --config .markdownlint.json --dot **/*.md
 
    # Run code linting
-   luacheck .
+   vendor/bin/luacheck .
+
+   # Run unit and integration tests with coverage reporting
+   rm luacov.*.out; vendor/bin/busted; vendor/bin/luacov
    ```
 
 4. **Commit and Push**
@@ -230,40 +240,7 @@ Use [Conventional Commits](https://www.conventionalcommits.org/) format:
 ```text
 feat(extraction): add support for fluid prototype extraction
 fix(validation): correct entity property validation schema
-test(integration): add modpack compatibility tests
 ```
-
-## Testing Guidelines
-
-### Test Categories
-
-#### Unit Tests
-
-- Test individual extraction functions
-- Validate data transformation logic
-- Test utility functions and helpers
-
-#### Integration Tests
-
-- Test complete extraction workflows
-- Verify output format compliance
-- Test with real Factorio data
-
-### Testing Requirements
-
-**Before Submitting PRs:**
-
-- [ ] All unit tests pass
-- [ ] Integration tests pass with vanilla Factorio
-- [ ] No regression in extraction accuracy
-- [ ] Output format validation passes
-- [ ] Documentation updated for new features
-
-### Test Data Management
-
-- **Vanilla Data**: Automated tests use vanilla Factorio installations
-- **Test Fixtures**: Maintain consistent test data for reliability
-- **Output Validation**: Verify extracted data meets schema requirements
 
 ## Documentation Guidelines
 
@@ -282,14 +259,12 @@ Follow the repository's `.markdownlint.json` configuration:
 
 - Document complex extraction algorithms
 - Explain Factorio-specific data handling
-- Provide examples for public functions
 
 ## Generator-Specific Considerations
 
 ### Factorio Version Compatibility
 
-- **Supported Versions**: Currently targeting minimum Factorio 2.0.66
-- **Lua Version**: Must use Lua 5.2 (Factorio's embedded version)
+- **Supported Versions**: Currently targeting minimum Factorio 2.0.69
 - **Backwards Compatibility**: Document version-specific behaviors
 
 ### Data Extraction Principles
@@ -297,7 +272,6 @@ Follow the repository's `.markdownlint.json` configuration:
 **Accuracy First:**
 
 - Preserve original data structure and types
-- Maintain referential integrity between prototypes
 - Validate extracted data against known schemas
 
 ## Issue and Pull Request Process
@@ -316,8 +290,7 @@ for centralized tracking. Use the component selector to specify "Generator" as t
 ### Pull Request Guidelines
 
 1. **Use Conventional Commit Format** in PR titles
-2. **Include Test Results**: Show vanilla Factorio test passes
-3. **Document Breaking Changes**: Highlight any API or format changes
+2. **Document Breaking Changes**: Highlight any API or format changes
 
 ### Review Criteria
 
@@ -328,8 +301,7 @@ for centralized tracking. Use the component selector to specify "Generator" as t
 
 **Testing:**
 
-- Unit tests for new functionality
-- Integration test compatibility
+- Tests for new functionality
 
 **Documentation:**
 

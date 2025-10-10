@@ -75,22 +75,6 @@ Please fill out this template to help us review your data extraction improvement
 - [ ] Added inline documentation for complex extraction/validation functions
 - [ ] Examples provided for new capabilities
 
-## Testing Details
-
-### Test Environment
-
-<!-- Describe how you tested these changes -->
-
-- **Operating System**: [e.g., Windows 11, Ubuntu 24.04]
-- **Factorio Version**: [e.g., 2.0.66]
-- **Lua Version**: [e.g., 5.2.4]
-
-### Extraction Test Results
-
-- [ ] All entity types extracted successfully
-- [ ] Data validation passes
-- [ ] Output format correct
-
 ## Factorio-Specific Considerations
 
 ### Version Compatibility
@@ -98,12 +82,6 @@ Please fill out this template to help us review your data extraction improvement
 - [ ] This change maintains compatibility with supported Factorio versions
 - [ ] Any version-specific code is properly documented
 - [ ] Breaking changes in Factorio API are handled appropriately
-
-### Output Format Validation
-
-- [ ] Generated data are syntactically valid Lua 5.2
-- [ ] Data can be successfully loaded as Lua tables
-- [ ] Data structure follows expected format
 
 ## Backward Compatibility
 

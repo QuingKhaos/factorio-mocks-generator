@@ -12,5 +12,9 @@
 .factorio/mods/*
 !.factorio/mods/mod-list.json
 
+.tmp/
+/vendor/
+*_backup*
+
 luacov.stats.out
 luacov.report.out

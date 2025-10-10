@@ -8,40 +8,40 @@ on:
 
 jobs:
   mod-tests:
-    name: Complete Generator Unit & Integration Tests (Lua 5.2, Linux)
+    name: Mod Tests (Lua 5.2) (ubuntu-latest)
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - name: Install Lua 5.2
+      - name: Install Lua 5.2 and LuaRocks
         run: |
           sudo apt-get update
           sudo apt-get install -y lua5.2 liblua5.2-dev luarocks
 
       - name: Install dev dependencies
         run: |
-          sudo luarocks install --only-deps factorio-mocks-generator-dev-1.rockspec
+          sudo luarocks install busted
+          sudo luarocks install luacov
+          sudo luarocks install serpent
 
-      - name: Run mod unit tests with coverage
-        run: busted --output=TAP --run=mod --tags=UNIT
+      - name: Run mod unit tests
+        run: busted --output=TAP --run=mods --tags=UNIT
 
-      - name: Run mod integration tests with coverage
-        run: busted --output=TAP --run=mod --tags=INTEGRATION
+      - name: Run mod integration tests
+        run: busted --output=TAP --run=mods --tags=INTEGRATION
 
       - name: Generate coverage report
         run: luacov
 
-      - name: Display coverage report
-        run: cat luacov.report.out
-
-      - name: Upload coverage results
+      - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
           name: mod-coverage-report
           path: |
             luacov.report.out
+          retention-days: 7
 
       - name: Download headless Factorio
         run: |
@@ -55,7 +55,7 @@ jobs:
         run: |
           echo "Creating mods directory and symbolic link..."
           mkdir -p .factorio/mods
-          ln --symbolic --relative $(pwd)/mod $(pwd)/.factorio/mods/factorio-mocks-generator
+          ln --symbolic --relative $(pwd)/mods/factorio-mocks-generator $(pwd)/.factorio/mods/factorio-mocks-generator
 
       - name: Run Factorio data extraction
         timeout-minutes: 5
@@ -133,10 +133,10 @@ jobs:
 
           # Validate key files exist
           key_files=(
-            ".factorio/script-output/factorio-mocks-generator/prototype/data-raw.lua"
+            ".factorio/script-output/factorio-mocks-generator/prototype/data-raw/init.lua"
             ".factorio/script-output/factorio-mocks-generator/prototype/mods.lua"
             ".factorio/script-output/factorio-mocks-generator/prototype/settings.lua"
-            ".factorio/script-output/factorio-mocks-generator/prototype/feature_flags.lua"
+            ".factorio/script-output/factorio-mocks-generator/prototype/feature-flags.lua"
           )
 
           for file in "${key_files[@]}"; do
@@ -171,9 +171,54 @@ jobs:
           fi
 
       - name: Upload extracted data
-        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: extracted-factorio-data
           path: .factorio/script-output/factorio-mocks-generator/
-          retention-days: 30
+          retention-days: 7
+
+  generator-tests:
+    name: Generator Tests (Lua 5.4) (ubuntu-latest)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Install dev dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libpcre2-dev
+
+      - name: Install Lua 5.4
+        uses: leafo/gh-actions-lua@v12
+        with:
+          luaVersion: "5.4"
+
+      - name: Install LuaRocks
+        uses: leafo/gh-actions-luarocks@v6
+      
+      - name: Install Lua dependencies
+        run: |
+          luarocks config variables.CURL_INCDIR /usr/include/x86_64-linux-gnu
+          luarocks install --only-deps factorio-mocks-generator-dev-1.rockspec
+
+      - name: Run generator unit tests
+        run: |
+          busted --output=TAP --run=generator --tags=UNIT
+
+      - name: Run generator integration tests
+        run: |
+          busted --output=TAP --run=generator --tags=INTEGRATION
+
+      - name: Generate test coverage report
+        run: |
+          luacov
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: generator-coverage-report
+          path: |
+            luacov.report.out
+          retention-days: 7

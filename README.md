@@ -23,9 +23,9 @@ It's used in the ecosystem to extract data from various modpack configurations f
 
 **What it extracts:**
 
-- `data.raw`, `mods`, `settings`, and `feature_flags` from data stage
-- `prototypes` and runtime `settings` interface from control stage
-- Localization strings across all loaded languages
+- `data.raw`, `mods`, `settings`, and `feature_flags` from prototype stage
+- `prototypes` and runtime `settings` interface from runtime stage (to be implemented)
+- Localization strings across all loaded languages (to be implemented)
 
 ## 🏗️ Architecture
 
@@ -33,9 +33,9 @@ It's used in the ecosystem to extract data from various modpack configurations f
 
 The generator operates during multiple stages of Factorio's mod loading process to capture different types of data:
 
-1. **Data Stage (Prototype Stage)** - Extract `data.raw`, `mods`, `settings`, and `feature_flags`
-2. **Control Stage (Runtime)** - Extract `prototypes` and runtime `settings` interface
-3. **Localization Extraction** - Capture all localization strings from active mods after Factorio has run
+1. **Prototype Stage** - Extract `data.raw`, `mods`, `settings`, and `feature_flags`
+2. **Runtime Stage** - Extract `prototypes` and runtime `settings` interface (to be implemented)
+3. **Localization Extraction** - Capture all localization strings from active mods after Factorio has run (to be implemented)
 
 ### Output Format
 
@@ -46,7 +46,7 @@ extracted-data/
 ├── prototype/         # Data stage settings and prototypes
 ├── runtime/           # Control stage runtime examples
 ├── locale/            # All language strings combined, one file per language
-└── metadata.json      # Extraction metadata and checksums
+└── metadata.lua       # Extraction metadata and checksums
 ```
 
 ## 🚀 Current Status
@@ -56,11 +56,10 @@ extracted-data/
 **Implementation Status:**
 
 - ✅ **Foundation Setup** - Repository infrastructure and documentation
-- ⏳ **Prototype Stage Extraction** - Extract `data.raw`, `mods`, `settings`, `feature_flags`
+- ✅ **Prototype Stage Extraction** - Extract `data.raw`, `mods`, `settings`, `feature_flags`
 - ⏳ **Runtime Stage Extraction** - Extract `prototypes` and runtime `settings`
 - ⏳ **Localization Extraction** - Extract all available localization strings
-- ⏳ **Data Validation** - Data quality checks and validation logic
-- ⏳ **Distribution Integration** - Git and ORAS publishing to GitHub Container Registry
+- ✅ **Data Validation** - Data quality checks and validation logic
 
 ## 🎮 How It Works
 
@@ -70,8 +69,8 @@ TODO
 
 ### Prerequisites
 
-- **Factorio** (2.0.66+) installed
-- **Lua 5.2** knowledge for mod development (Factorio's Lua version)
+- **Factorio** (2.0.69+) installed
+- **Lua** knowledge for generator development
 - **Git** and **GitHub CLI** for repository management
 
 ### Quick Start
@@ -82,14 +81,7 @@ For detailed development setup, see the [Contributing Guide](CONTRIBUTING.md#dev
 
 1. Clone the repository
 2. Create symlink to Factorio mods directory
-3. Run extract and validate command
-
-### Testing Strategy
-
-- **Unit Tests**: Individual extraction functions
-- **Validation Tests**: Verify extracted data against expected schemas
-- **Automated Testing**: Vanilla Factorio setup for consistent CI/CD testing
-- **Modpack Compatibility**: Production use with various modpack configurations
+3. Run extraction and validation commands
 
 ## 📚 Documentation
 
@@ -114,7 +106,7 @@ entire testing ecosystem.
 
 ### Ways to Contribute
 
-- **Lua Development**: Improve extraction logic and add new data sources
+- **Lua Development**: Improve extraction logic and add new features
 - **Data Validation**: Help ensure extracted data validation is complete and accurate
 - **Documentation**: Improve guides and API documentation
 - **Testing**: Add test cases
@@ -150,7 +142,3 @@ strong copyleft protections for the codebase.
 If this project helps your Factorio mod development, consider supporting its development:
 
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-support%20this%20project-hotpink?logo=kofi&logoColor=white&style=for-the-badge)](https://ko-fi.com/quingkhaos)
-
----
-
-**Status**: 🚧 Early Development Phase - Infrastructure setup and planning complete, implementation beginning.
