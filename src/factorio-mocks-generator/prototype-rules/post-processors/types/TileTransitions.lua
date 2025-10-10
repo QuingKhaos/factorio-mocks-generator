@@ -13,7 +13,7 @@ function TileTransitions.process(_, rules)
   -- Add metadata.oneline to `*_weights`
   for field, rule in pairs(new_rules) do
     if string.match(field, "_weights$") then
-      rule.metadata.oneline = true
+      rule[#rule].metadata.oneline = true
     end
   end
 
